@@ -29,6 +29,23 @@
     (\xRight, \yLower)
     node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
 }
+\newganttlinktype{lu033}{%
+  \ganttsetstartanchor{east}%
+  \ganttsetendanchor{on top=0.3333}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+
+\newganttlinktype{dl033}{%
+  \ganttsetstartanchor{on bottom=0.3333}%
+  \ganttsetendanchor{north west}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
 
 \begin{document}
 \begin{preview}
@@ -48,17 +65,18 @@
       \ganttbar{EG\_IsoThreshold}{11}{11} \\     % 3 
       \ganttbar{ClusterRegionSelect}{4}{4} \\    % 4
       \ganttbar{ClusterNeighbourSelect}{5}{5} \\ % 5
-      \ganttbar[bar/.style={draw,fill=red!30}]{ClusterQuality}{6}{7} \\ 	 % 6
-      \ganttbar{Tau\_ClusterTriggerFormer}{8}{10} \\  % 7
-      \ganttbar[bar/.style={draw,fill=red}]{Tau\_ClusterMerge}{11}{12} \\  % 8
-      \ganttbar[bar/.style={draw,fill=red}]{Tau\_IsoThreshold}{13}{13} \\     %  9
-      \ganttbar[bar/.style={draw,fill=red!30}]{EG\_ClusterTriggerFormer}{8}{10} \\  % 10
+      \ganttbar[bar/.style={draw,fill=red!30}]{ClusterQuality}{6}{7} \\ % 6
+      \ganttbar{Common\_ClusterTriggerFormer}{8}{10} \\  % 7
+      \ganttbar{Tau\_ClusterTriggerFormer}{9}{10} \\  % 8
+      \ganttbar[bar/.style={draw,fill=red}]{Tau\_ClusterMerge}{11}{12} \\  % 9 
+      \ganttbar[bar/.style={draw,fill=red}]{Tau\_IsoThreshold}{13}{13} \\     % 10
+      \ganttbar[bar/.style={draw,fill=red!30}]{EG\_ClusterTriggerFormer}{9}{11} \\  %11
 
-      \ganttbar{Clusters}{4}{8} \\               % 11
-      \ganttbar[bar/.style={draw,fill=red}]{Tau\_Isolation}{13}{14}    \\        %   12
-      \ganttbar[bar/.append style={draw,fill=red}]{Tau\_EnergyCalib}{13}{15} \\  %  13
-      \ganttbar{EG\_Isolation}{11}{12} \\            %  14
-      \ganttbar{EG\_ShapeIdentEnergyCalib}{11}{14}  %   15
+      \ganttbar{Clusters}{4}{8} \\               % 12
+      \ganttbar[bar/.style={draw,fill=red}]{Tau\_Isolation}{13}{14}    \\        % 13 
+      \ganttbar[bar/.append style={draw,fill=red}]{Tau\_EnergyCalib}{13}{15} \\  % 14
+      \ganttbar{EG\_Isolation}{11}{12} \\            % 15
+      \ganttbar{EG\_ShapeIdentEnergyCalib}{12}{14}  % 16
 
       % List of input/output links
       % from LinkIn
@@ -67,40 +85,45 @@
       % from ClusterFormer
       \ganttlink[link type=lu0]{elem1}{elem4}
       \ganttlink[link mid=0]{elem1}{elem5}
-      \ganttlink[link mid=0]{elem1}{elem10}
+      \ganttlink[link mid=0]{elem1}{elem11}
       \ganttlink[link type=lu0]{elem1}{elem2}
       \ganttlink[link mid=0]{elem1}{elem7}
-      \ganttlink[link type=lu0]{elem1}{elem11}
+      \ganttlink[link type=lu0]{elem1}{elem12}
       % from ClusterRegionSelect
       \ganttlink[link mid=0]{elem4}{elem6}
       % from ClusterNeighbourSelect
       \ganttlink[link type=lu0]{elem5}{elem6}
       % from EGammaQuality
       \ganttlink[link type=lu0]{elem6}{elem7}
-      \ganttlink[link type=lu0]{elem6}{elem10}
-      \ganttlink[link mid=0]{elem6}{elem15}
+      %\ganttlink[link type=lu0]{elem6}{elem11}
+      \ganttlink[link mid=0]{elem6}{elem16}
+      % from Common_ClusterTriggerFormer
+      \ganttlink[link type=dl033]{elem7}{elem8}
+      \ganttlink[link type=dl033]{elem7}{elem11}
+      \ganttlink[link type=dl033]{elem7}{elem15}
+      \ganttlink[link mid=0.5]{elem7}{elem16}
       % from Tau_ClusterTriggerFormer
-      \ganttlink[link type=lu0]{elem7}{elem8}
+      \ganttlink[link type=lu0]{elem7}{elem9}
       % from Tau_ClusterMerge
-      \ganttlink[link type=lu0]{elem8}{elem9}
-      \ganttlink[link type=lu0]{elem8}{elem12}
-      \ganttlink[link type=lu0]{elem8}{elem13}
+      \ganttlink[link type=lu0]{elem9}{elem10}
+      \ganttlink[link type=lu0]{elem9}{elem13}
+      \ganttlink[link type=lu0]{elem9}{elem14}
       % from EG_ClusterTriggerFormer
-      \ganttlink[link type=lu0]{elem10}{elem14}
-      \ganttlink[link type=lu0]{elem10}{elem15}
+      %\ganttlink[link type=lu0]{elem11}{elem15}
+      \ganttlink[link type=lu0]{elem11}{elem16}
       % from Clusters
-      \ganttlink[link mid=0]{elem11}{elem12}
-      \ganttlink[link mid=0]{elem11}{elem14}
+      \ganttlink[link mid=0]{elem12}{elem13}
+      \ganttlink[link mid=0]{elem12}{elem15}
       % from PileupEstimator
       \ganttlink[link type=lu0]{elem2}{elem3}
-      \ganttlink[link mid=0.75]{elem2}{elem9}
-      \ganttlink[link type=lu05]{elem3}{elem14}
+      \ganttlink[link mid=0.75]{elem2}{elem10}
+      \ganttlink[link type=lu05]{elem3}{elem15}
       % from Tau_IsoThreshold
-      \ganttlink[link type=lu05]{elem9}{elem12}
+      \ganttlink[link type=lu05]{elem10}{elem13}
       % from EG_Isolation
-      \ganttlink[link type=lu05]{elem14}{elem15}
+      \ganttlink[link type=lu033]{elem15}{elem16}
       % from Tau_Isolation
-      \ganttlink[link type=lu066]{elem12}{elem13}
+      \ganttlink[link type=lu066]{elem13}{elem14}
     \end{ganttchart}
 \end{preview}
 \end{document}

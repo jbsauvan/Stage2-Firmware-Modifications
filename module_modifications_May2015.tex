@@ -37,19 +37,19 @@
 \renewcommand{\contentsname}{}
 
 
-\vspace*{1cm}
+%\vspace*{1cm}
 \begin{center}
-{\LARGE \bf Firmware updates -- May 2015 -- v0.3}\\
-\vspace*{0.1cm}
+{\LARGE \bf Firmware updates -- May 2015 -- v0.4}\\
+%\vspace*{0.1cm}
 %{\normalsize Jean-Baptiste Sauvan (sauvan@llr.in2p3.fr)}
 \end{center}
-\vspace*{1cm}
+%\vspace*{1cm}
 
 
 \begin{figure}[hbtp]
   \begin{center}
     \includegraphics[width=11cm]{./gantt_charts/firmware_egAndTau_mod.pdf}
-    \caption{Timing and relation graph of the EGamma and Tau firmware. Each row corresponds to a given module of the algorithm, while the columns indicate the clock number. Gray modules are modules that don't require updates with respect to the current firmware implementation. Pink modules require updates or fixes. Red modules are currently not existing.}
+    \caption{Timing and relation graph of the EGamma and Tau firmware. Each row corresponds to a given module of the algorithm, while the columns indicate the clock number. Gray modules are modules that don't require updates with respect to the current firmware implementation. Pink modules require updates or fixes. Red modules are currently not existing. \textcolor{red}{NEED TO BE CLEANED}}
     \label{fig:gantt}
   \end{center}
 \end{figure}
@@ -395,12 +395,13 @@ if(iEta=-1)
 \subsection{EGammaNeighborQuality}
 No change.
 
-\section{EGClusterTriggerFormer}
-An additional trimming is added on top of the left--right trimming. This additional trimming is specific to egamma clusters. It depends on the cluster flags as well as on the ieta position and is implemented via a LUT (with 12 bits in inputs and 7 bits in output).
-%
-This additional trimming makes the trigger former module more complicated due to the necessity to compute first the left--right flag before trimming the cluster flags and computing the final cluster energy from the trimmed cluster flags. It should require one more adder as well as more latency from reading the trimming LUT and recomputing partial sums. The updates are detailed below.
+\section{ClusterTriggerFormer}
+The logic to create final clusters is currently grouped in one single module called EClusterTriggerFormer. Part of the logic in this module is common to egamma and tau objects, while the second part should be split in two modules specific to egamma and taus. It results in three modules, with one among them being common to egamma and tau.
 
-\begin{Verbatim}[label={EG cluster energy sums}]
+\subsection{CommonClusterTriggerFormer}
+This module is common to egamma and tau objects. It computes the left/right flag as well as the cluster fine position and no changes are needed with respect to what already exists.
+
+\begin{Verbatim}[label={Common cluster trigger former}]
 \textit{//******************************************************************//}
 \textit{// Tower zero suppression}
 C    = (C    if keepTower_C    else 0)
@@ -417,15 +418,54 @@ R2S  = (R2S  if keepTower_R2S  else 0)
 \textit{//******************************************************************//}
 \textit{// Partial sums}
 SUMLEFT   = R1NW + R1W + R1SW
-\textcolor{red}{SUMCENTRE = R1N  + C   + R1S}
+SUMCENTRE = R1N  + C   + R1S
 SUMRIGHT  = R1NE + R1E + R1SE
-\textcolor{red}{SUMEXTEND = R2N  + R2S}
+SUMEXTEND = R2N  + R2S
 \textit{//******************************************************************//}
-\textit{// Left flag}
+\textit{// Left flags}
 if iEta<0
   LeftFlag = SUMLEFT > SUMRIGHT
 if iEta>0
   LeftFlag = SUMLEFT >= SUMRIGHT
+\textit{//******************************************************************//}
+\textit{// Fine position -- Phi}
+SUM3UP   = R1NW + R1N + R1NE
+SUM3DOWN = R1SW + R1S + R1SE
+SUMUP    = SUM3UP + R2N
+SUMDOWN  = SUM3DOWN + R2S
+if SUMUP>SUMDOWN
+  PhiFinePos = UPPER
+elsif SUMUP<SUMDOWN
+   PhiFinePos = LOWER 
+else
+  PhiFinePos = CENTER
+\textit{//******************************************************************//}
+\textit{// Fine position -- Eta}
+if SUMLEFT>SUMRIGHT
+  EtaFinePos = LEFT
+elsif SUMLEFT=SUMRIGHT
+  EtaFinePos = CENTER
+else
+  EtaFinePos = RIGHT
+\end{Verbatim}
+
+\subsection{TauClusterTriggerFormer}
+The tau-specific module is a copy of the second part of the current ClusterTriggerFormer module. Since most of the processing is performed in CommonClusterTriggerFormer, only the final energy sum has to be computed here.
+
+\begin{Verbatim}[label={Tau cluster trigger former}]
+\textit{//******************************************************************//}
+\textit{// Final sum}
+SUMLEFTRIGHT = (SUMLEFT if LeftFlag else SUMRIGHT)
+SUMGLOBAL = SUMLEFTRIGHT + SUMCENTRE + SUMEXTEND
+\end{Verbatim}
+
+\subsection{EGClusterTriggerFormer}
+
+An additional trimming is added on top of the left--right trimming. This additional trimming is specific to egamma clusters. It depends on the cluster flags as well as on the ieta position and is implemented via a LUT (with 12 bits in inputs and 7 bits in output).
+%
+This additional trimming makes the trigger former module more complicated due to the necessity to compute first the left--right flag before trimming the cluster flags and computing the final cluster energy from the trimmed cluster flags. It should require one more adder as well as more latency from reading the trimming LUT and recomputing partial sums. The updates are detailed below.
+
+\begin{Verbatim}[label={EG cluster energy sums}]
 \textit{//******************************************************************//}
 \textit{// Trimming LUT}
 \textcolor{blue}{keepTower_R1NWorNE = (keepTower_R1NW if LeftFlag else keepTower_R1NE)}
@@ -459,8 +499,6 @@ if iEta>0
 \textcolor{blue}{SUMEXTENDTRIM = R2NTRIM + R2STRIM}
 \textit{//******************************************************************//}
 \textit{// Final sum}
-\textcolor{red}{SUMLEFTRIGHT = (SUMLEFT if LeftFlag else SUMRIGHT)}
-\textcolor{red}{SUMGLOBAL = SUMLEFTRIGHT + SUMCENTRE + SUMEXTEND}
 \textcolor{blue}{SUMGLOBAL = SUMLEFTRIGHTTRIM + SUMCENTRETRIM + SUMEXTENDTRIM}
 \end{Verbatim}
 
