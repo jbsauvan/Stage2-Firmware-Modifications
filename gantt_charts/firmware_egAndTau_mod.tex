@@ -47,6 +47,15 @@
     node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
 }
 
+\newganttlinktype{dr033}{%
+  \ganttsetstartanchor{on bottom=0.3333}%
+  \ganttsetendanchor{east}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+
 \begin{document}
 \begin{preview}
     % Modified EGamma+tau firmware
@@ -100,7 +109,7 @@
       % from Common_ClusterTriggerFormer
       \ganttlink[link type=dl033]{elem7}{elem8}
       \ganttlink[link type=dl033]{elem7}{elem11}
-      \ganttlink[link type=dl033]{elem7}{elem15}
+      \ganttlink[link type=dr033]{elem7}{elem12}
       \ganttlink[link mid=0.5]{elem7}{elem16}
       % from Tau_ClusterTriggerFormer
       \ganttlink[link type=lu0]{elem7}{elem9}
