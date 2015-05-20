@@ -39,7 +39,7 @@
 
 %\vspace*{1cm}
 \begin{center}
-{\LARGE \bf Firmware updates -- May 2015 -- v0.6}\\
+{\LARGE \bf Firmware updates -- May 2015 -- v0.7}\\
 %\vspace*{0.1cm}
 %{\normalsize Jean-Baptiste Sauvan (sauvan@llr.in2p3.fr)}
 \end{center}
@@ -100,22 +100,7 @@ if(iEta>1)
   \textcolor{red}{if(R2S  >= C) invalidateCluster}
   \textcolor{blue}{if(R2S  >= C and R1S >= clusterThreshold) invalidateCluster}
 \textit{//******************************************************************//}
-\textit{// Negative eta}
-\textcolor{red}{else if(iEta<0)}
-\textcolor{blue}{else if(iEta<-1)}
-  \textcolor{red}{if(R2N  >= C) invalidateCluster}
-  \textcolor{blue}{if(R2N  >= C and R1N >= clusterThreshold) invalidateCluster}
-  if(R1N  >= C) invalidateCluster
-  if(R1NE >= C) invalidateCluster
-  if(R1E  >= C) invalidateCluster
-  if(R1SE >= C) invalidateCluster
-  if(R1S  >  C) invalidateCluster
-  if(R1SW >  C) invalidateCluster
-  if(R1W  >  C) invalidateCluster
-  if(R1NW >  C) invalidateCluster
-  \textcolor{blue}{if(R2S  >  C and R1S >= clusterThreshold) invalidateCluster}
-\textit{//******************************************************************//}
-\textit{// Central boundary}
+\textit{// Boundary positive eta}
 else if(iEta=1)
   \textcolor{blue}{if(R2N  >  C and R1N >= clusterThreshold) invalidateCluster}
   if(R1N  >  C) invalidateCluster
@@ -128,6 +113,21 @@ else if(iEta=1)
   if(R1NW >  C) invalidateCluster
   \textcolor{red}{if(R2S  >= C) invalidateCluster}
   \textcolor{blue}{if(R2S  >= C and R1S >= clusterThreshold) invalidateCluster}
+\textit{//******************************************************************//}
+\textit{// Negative eta (including boundary)}
+else if(iEta<0)
+  \textcolor{red}{if(R2N  >= C) invalidateCluster}
+  \textcolor{blue}{if(R2N  >= C and R1N >= clusterThreshold) invalidateCluster}
+  if(R1N  >= C) invalidateCluster
+  if(R1NE >= C) invalidateCluster
+  if(R1E  >= C) invalidateCluster
+  if(R1SE >= C) invalidateCluster
+  if(R1S  >  C) invalidateCluster
+  if(R1SW >  C) invalidateCluster
+  if(R1W  >  C) invalidateCluster
+  if(R1NW >  C) invalidateCluster
+  \textcolor{blue}{if(R2S  >  C and R1S >= clusterThreshold) invalidateCluster}
+
 \textit{//******************************************************************//}
 \end{Verbatim}
 
