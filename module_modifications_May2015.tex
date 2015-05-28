@@ -39,7 +39,7 @@
 
 %\vspace*{1cm}
 \begin{center}
-{\LARGE \bf Firmware updates -- May 2015 -- v0.8}\\
+{\LARGE \bf Firmware updates -- May 2015 -- v0.9}\\
 %\vspace*{0.1cm}
 %{\normalsize Jean-Baptiste Sauvan (sauvan@llr.in2p3.fr)}
 \end{center}
@@ -220,7 +220,8 @@ if(iEta=1)
     keepTower_R1SW = false
     keepTower_R1S  = false
     keepTower_R1SE = false
-  if R2SSW > C
+  \textcolor{red}{if R2SSW >= C}
+  \textcolor{blue}{if R2SSW > C}
     keepTower_R1SW = false
     keepTower_R1S  = false
     \textcolor{blue}{keepTower_R2S  = false}
@@ -250,7 +251,8 @@ if(iEta=1)
     \textcolor{red}{keepTower_R1SE = false}
     \textcolor{blue}{if(R2SSE >= clusterThreshold) keepTower_R1SE = false}
     keepTower_R2S  = false
-  if R3SW > C
+  \textcolor{red}{if R3SW >= C}
+  \textcolor{blue}{if R3SW > C}
     \textcolor{red}{keepTower_R1SW = false}
     \textcolor{blue}{if(R2SSW >= clusterThreshold) keepTower_R1SW = false}
     keepTower_R2S  = false
@@ -328,11 +330,13 @@ if(iEta<-1)
 \textit{//******************************************************************//}
 \textit{// Boundary Negative eta}
 if(iEta=-1) 
-  if R2N >= C 
+  \textcolor{red}{if R2N > C}
+  \textcolor{blue}{if R2N >= C}
     keepTower_R1NW = false
     keepTower_R1N  = false
     keepTower_R1NE = false
-  if R2NNE >= C
+  \textcolor{red}{if R2NNE > C}
+  \textcolor{blue}{if R2NNE >= C}
     keepTower_R1N  = false
     keepTower_R1NE = false
     \textcolor{blue}{keepTower_R2N  = false}
@@ -342,7 +346,8 @@ if(iEta=-1)
     keepTower_R1SE = false
     \textcolor{blue}{keepTower_R2S  = false}
     \textcolor{blue}{if(R1SE >= clusterThreshold) keepTower_R1E = false}
-  if R2S > C
+  \textcolor{red}{if R2S >= C}
+  \textcolor{blue}{if R2S > C}
     keepTower_R1SW = false
     keepTower_R1S  = false
     keepTower_R1SE = false
@@ -356,11 +361,13 @@ if(iEta=-1)
     keepTower_R1N  = false
     \textcolor{blue}{keepTower_R2N  = false}
     \textcolor{blue}{if(R1NW >= clusterThreshold) keepTower_R1W = false}
-  if R3N >= C
+  \textcolor{red}{if R3N > C}
+  \textcolor{blue}{if R3N >= C}
     \textcolor{red}{keepTower_R1N = false}
     \textcolor{blue}{if(R2N >= clusterThreshold) keepTower_R1N = false}
     keepTower_R2N = false
-  if R3NE >= C
+  \textcolor{red}{if R3NE > C}
+  \textcolor{blue}{if R3NE >= C}
     \textcolor{red}{keepTower_R1NE = false}
     \textcolor{blue}{if(R2NNE >= clusterThreshold) keepTower_R1NE = false}
     keepTower_R2N  = false
@@ -368,7 +375,8 @@ if(iEta=-1)
     \textcolor{red}{keepTower_R1NW = false}
     \textcolor{blue}{if(R2NNW >= clusterThreshold) keepTower_R1NW = false}
     keepTower_R2N  = false
-  if R3S > C
+  \textcolor{red}{if R3S >= C}
+  \textcolor{blue}{if R3S > C}
     \textcolor{red}{keepTower_R1S = false}
     \textcolor{blue}{if(R2S >= clusterThreshold) keepTower_R1S = false}
     keepTower_R2S = false
@@ -380,11 +388,13 @@ if(iEta=-1)
     \textcolor{red}{keepTower_R1SW = false}
     \textcolor{blue}{if(R2SSW >= clusterThreshold) keepTower_R1SW = false}
     keepTower_R2S  = false
-  if R4N >= C
+  \textcolor{red}{if R4N > C}
+  \textcolor{blue}{if R4N >= C}
     \textcolor{red}{keepTower_R1N = false}
     \textcolor{red}{keepTower_R2N = false}
     \textcolor{blue}{if(R3N >= clusterThreshold) keepTower_R2N = false}
-  if R4S > C
+  \textcolor{red}{if R4S >= C}
+  \textcolor{blue}{if R4S > C}
     \textcolor{red}{keepTower_R1S = false}
     \textcolor{red}{keepTower_R2S = false}
     \textcolor{blue}{if(R3S >= clusterThreshold) keepTower_R2S = false}
