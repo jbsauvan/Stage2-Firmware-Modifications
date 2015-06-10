@@ -580,8 +580,55 @@ Hcluster2x1 = HCluster2x1Former(TowerPipeForClusters)
 \end{Verbatim}
 
 
+\section{TauMergeNeighSearch}
+Checks adjacent cluster seeds: only max one at time can exist, outputs a bit for each pair according to this information
+(if none of the element of the pair exist, default value is 0).
 
+For each $\phi$ ring information is regrouped into 32 computation units that are denoted here with UC.
+Inside each unit, a bit tells if the cluster is in the upper or lower part: here it is denoted with UC-X.UP (if UP == true it's in
+the upper part, if it is false it's in the lower part).
 
+Symbols: starting from the central UC and moving north, the two adjacent units are UCN and UC2N. Moving south, they are UCS and UC2S.
+If it is in the right (east) ring a suffix ``E'' is added, if it is to the west (left) a ``W'' is added:
+e.g. UCNE is the unit that is one step north and one east. See the sketch in figure \ref{TauMergeNeighSearch_scheme}.
+
+The four output bits are O32, O01, O65, O74 (refer to tau algo slides). Default is 0 for all.
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.5]{./tex_images/tauSchemeUC}
+\caption{\label{TauMergeNeighSearch_scheme}Scheme of computation unit (UC) and neighbour naming for the two cases of central cluster
+UP (left) and DOWN (right)}
+\end{figure}
+
+\begin{Verbatim}[label={Tau merging neighbours existence check}]
+\textit{//******************************************************************//}
+\textit{// Init all to default values}
+O32 = O01 = O65 = O74 = 0
+if UP:   \textit{// the central cluster seed is in the upper part}
+  \textit{// north side}
+  if UCN.Center == 1:
+    O32 = 1
+  if UCNW.Center == 1:
+    O01 = 1
+  \textit{// south side}
+  if UCS.UP == 1 && UCS.Center == 1:
+    O65 = 1
+  if UCSW.UP == 0 && UCSW.Center == 1: 
+    O74 = 1
+else:   \textit{// the central cluster seed is in the lower part}
+  \textit{// north side}
+  if UCN.UP == 0 && UCN.Center == 1:
+    O32 = 1
+  if UCNW.UP == 1 && UCNW.Center == 1:
+    O01 = 1
+  \textit{// south side}
+  if UCS.Center == 1:
+    O65 = 1
+  if UCSW.Center == 1:
+    O74 = 1
+OUTPUT (O32, O01, O65, O74)           
+\end{Verbatim}
 
 \end{document}
 
